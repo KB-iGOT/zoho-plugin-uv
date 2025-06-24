@@ -27,13 +27,13 @@ app.add_middleware(
 )
 
 
-@app.get("/zoho_plugin/root")
+@app.get("/root")
 async def root():
     """Root endpoint to verify server status."""
     return {"message": "This is Karmayogi Bharat ZOHO ticket support service REST integration !!"}
 
 
-@app.get("/zoho_plugin/ticket/details/{ticket_id}")
+@app.get("/ticket/details/{ticket_id}")
 async def get_ticket_user_details(
         ticket_id: str,
         x_zoho_cookies: Optional[str] = Header(None, alias="X-Zoho-Cookies")

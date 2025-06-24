@@ -1,18 +1,20 @@
-import nltk
-import pandas as pd
-import numpy as np
-import joblib
 import os
+
+import joblib
+import nltk
+import numpy as np
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
 from src import config
 
 nltk.download('stopwords')
+nltk.download('wordnet')
 class TicketPredictor:
     def __init__(self):
         """Initialize the predictor by loading pretrained models and encoders."""
         try:
+            print(config.NB_CLASSIFIER_CLASSIFICATION_PATH)
             # Check if all required files exist
             required_files = [
                 (config.NB_CLASSIFIER_CLASSIFICATION_PATH, "NB Classification Model"),

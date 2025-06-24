@@ -41,7 +41,7 @@ async def get_ticket_user_details(
 ):
     print("Ticket ID:", ticket_id)
     print("Zoho Cookies:", x_zoho_cookies)  # This will now contain the cookies
-
+    print("BASE PATH:: ", os.path.dirname(os.path.abspath(__file__)))
     # # Use the cookies to make authenticated requests to Zoho APIs
     # access_token = utils.get_access_token()
     # print("Access Token: ", access_token)

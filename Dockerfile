@@ -1,14 +1,16 @@
 FROM python:3.10-slim
 
-# Install uv.
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+# Copy requirements first for better caching
+COPY requirements.txt /app/requirements.txt
 
-# Copy the application into the container.
+# Set working directory
+WORKDIR /app
+
+# Install dependencies with exact versions
+RUN pip install -r requirements.txt
+
+# Copy application
 COPY . /app
 
-# Install the application dependencies.
-WORKDIR /app
-RUN uv sync --frozen --no-cache
-
-# Run the application.
+# Run the application
 CMD ["/app/.venv/bin/fastapi", "run", "src/main.py", "--port", "8000", "--host", "0.0.0.0"]

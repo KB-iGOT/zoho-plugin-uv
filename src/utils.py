@@ -92,3 +92,4 @@ def get_user_details_from_igot(email: str) -> dict:
             return {}
     else:
         raise Exception(f"Failed to fetch user details: {response.status_code} - {response.text}")
+

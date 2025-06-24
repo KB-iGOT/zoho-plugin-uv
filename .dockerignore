@@ -1,0 +1,27 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Distribution / packaging
+build/
+dist/
+wheels/
+*.egg-info/
+
+# Virtual environments
+.venv/
+.env/
+
+# Git
+.git/
+.gitignore
+.idea
+
+# Docker
+Dockerfile
+.dockerignore
+
+# OS files
+*.DS_Store

@@ -1,0 +1,17 @@
+[project]
+name = "zoho-plugin-uv"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi[standard]>=0.115.13",
+    "fastembed>=0.7.1",
+    "pydantic>=2.11.7",
+    "python-dotenv>=1.1.1",
+    "qdrant-client>=1.14.3",
+    "redis>=6.2.0",
+    "sqlalchemy>=2.0.41",
+    "streamlit>=1.46.0",
+    "uvicorn>=0.34.3",
+]

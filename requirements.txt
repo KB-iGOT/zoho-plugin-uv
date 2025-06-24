@@ -1,9 +1,0 @@
-python-dotenv
-fastapi[standard]
-uvicorn
-streamlit
-pydantic
-SQLAlchemy
-qdrant-client
-fastembed
-redis

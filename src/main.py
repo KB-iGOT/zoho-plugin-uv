@@ -7,6 +7,7 @@ from fastapi import Header
 from dotenv import load_dotenv
 
 from src import utils
+from src.inference import TicketPredictor
 
 load_dotenv()
 
@@ -64,10 +65,24 @@ async def get_ticket_user_details(
 
     user_details = utils.get_user_details_from_igot(user_email)
 
+    # fetch ticket categories and sub-categories
+    # Initialize predictor
+    predictor = TicketPredictor()
+
+    # Process tickets
+    classification_prediction = predictor.predict_tickets(ticket_details)
+    print("Classification Prediction: ", classification_prediction)
+
     # return user details if user details are found else throw an error
     if user_details:
         return {
-            "user_details": user_details
+            "classification_prediction": classification_prediction,
+            "user_id": user_details.get("id"),
+            "user_details": user_details,
+
         }
     else:
-        return {"error": "User details not found for the provided email."}
+        return {
+            "classification_prediction": classification_prediction,
+            "user_id": "Not Found",
+        }

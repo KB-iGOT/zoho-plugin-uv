@@ -27,7 +27,7 @@ app.add_middleware(
 )
 
 
-@app.get("/")
+@app.get("/zoho_plugin/root")
 async def root():
     """Root endpoint to verify server status."""
     return {"message": "This is Karmayogi Bharat ZOHO ticket support service REST integration !!"}

@@ -3,7 +3,7 @@
     'use strict';
 
     const API_BASE_URL = 'https://support.uat.karmayogibharat.net/zoho_plugin/ticket/details';
-//      const API_BASE_URL = 'http://127.0.0.1:8000/ticket/details';
+//    const API_BASE_URL = 'http://127.0.0.1:8000/ticket/details';
 
 
     // Extract ticket ID from URL

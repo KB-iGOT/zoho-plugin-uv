@@ -25,3 +25,6 @@ Dockerfile
 
 # OS files
 *.DS_Store
+
+#chrome extension files
+extn/

@@ -82,7 +82,7 @@ async def get_ticket_user_details(
         if not active_user_details:
             return {
                 "classification_prediction": classification_prediction,
-                "user_id": "No active user account found",
+                "user_id": "!!!! NO ACTIVE USER ACCOUNT FOUND !!!!",
                 "user_details_list": user_details_list
             }
         else:
@@ -96,5 +96,5 @@ async def get_ticket_user_details(
     else:
         return {
             "classification_prediction": classification_prediction,
-            "user_id": "Not Found",
+            "user_id": "!!! USER NOT FOUND !!!",
         }

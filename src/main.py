@@ -78,8 +78,8 @@ async def get_ticket_user_details(
         return {
             "classification_prediction": classification_prediction,
             "user_id": user_details.get("id"),
+            "profileDetails": user_details.get("profileDetails"),
             "user_details": user_details,
-
         }
     else:
         return {

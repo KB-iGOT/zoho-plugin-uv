@@ -80,7 +80,6 @@ async def get_ticket_user_details(
             "user_id": user_details.get("id"),
             "profileDetails": user_details.get("profileDetails"),
             "user_details": user_details,
-
         }
     else:
         return {

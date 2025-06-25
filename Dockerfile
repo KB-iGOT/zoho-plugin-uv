@@ -1,4 +1,4 @@
-FROM python:3.11-slim  # Changed from 3.10-slim
+FROM python:3.10-slim
 
 # Install uv.
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
@@ -8,7 +8,7 @@ COPY . /app
 
 # Install the application dependencies.
 WORKDIR /app
-RUN pip install -r requirements.txt
+RUN uv sync --frozen --no-cache
 
 # Run the application.
-CMD ["python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/app/.venv/bin/fastapi", "run", "src/main.py", "--port", "8000", "--host", "0.0.0.0"]

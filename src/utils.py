@@ -88,7 +88,7 @@ def get_user_details_from_igot(email: str) -> dict:
     if response.status_code == 200:
         data = response.json()
         if data.get('result', {}).get('response').get('content'):
-            return data['result']['response']['content'][0]
+            return data['result']['response']['content']
         else:
             return {}
     else:

@@ -63,7 +63,7 @@ async def get_ticket_user_details(
     if not user_email:
         return {"error": "User email not found in ticket details."}
 
-    user_details = utils.get_user_details_from_igot(user_email)
+    user_details_list = utils.get_user_details_from_igot(user_email)
 
     # fetch ticket categories and sub-categories
     # Initialize predictor
@@ -74,13 +74,25 @@ async def get_ticket_user_details(
     print("Classification Prediction: ", classification_prediction)
 
     # return user details if user details are found else throw an error
-    if user_details:
-        return {
-            "classification_prediction": classification_prediction,
-            "user_id": user_details.get("id"),
-            "profileDetails": user_details.get("profileDetails"),
-            "user_details": user_details,
-        }
+    if user_details_list:
+
+        # fetch the user details which has status as 1 from user_details_list
+        active_user_details = next((user for user in user_details_list if user.get("status") == 1), None)
+
+        if not active_user_details:
+            return {
+                "classification_prediction": classification_prediction,
+                "user_id": "No active user account found",
+                "user_details_list": user_details_list
+            }
+        else:
+            return {
+                "classification_prediction": classification_prediction,
+                "user_id": active_user_details.get("id"),
+                "profileDetails": active_user_details.get("profileDetails"),
+                "active_user_details": active_user_details,
+                "user_details_list": user_details_list
+            }
     else:
         return {
             "classification_prediction": classification_prediction,

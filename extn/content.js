@@ -3,7 +3,7 @@
     'use strict';
 
     const API_BASE_URL = 'https://support.uat.karmayogibharat.net/zoho_plugin/ticket/details';
-//      const API_BASE_URL = 'http://127.0.0.1:8000/ticket/details';
+//    const API_BASE_URL = 'http://127.0.0.1:8000/ticket/details';
 
 
     // Extract ticket ID from URL
@@ -361,6 +361,15 @@
                 const valueColor = getValueColor(value);
                 const displayValue = formatValue(value);
 
+                // Check if this is a user_id field with error messages
+                const isUserIdError = (key.toLowerCase() === 'user_id' || key.toLowerCase() === 'userid') &&
+                                      typeof value === 'string' &&
+                                      (value.includes('!!!! NO ACTIVE USER ACCOUNT FOUND !!!!') ||
+                                       value.includes('!!! USER NOT FOUND !!!'));
+
+                // Apply special styling for user_id error messages
+                const errorStyle = isUserIdError ? 'font-weight: bold; color: #d32f2f !important;' : '';
+
                 // Define which fields should have copy buttons
                 const copyableFields = [
                     'user id', 'id', 'userid', 'user_id',
@@ -376,11 +385,12 @@
                     'channel', 'source'
                 ];
 
-                // Check if field should have copy button
+                // Check if field should have copy button (but not for error messages)
                 const shouldShowCopyButton = value !== null &&
                                            value !== undefined &&
                                            value !== '' &&
                                            typeof value !== 'object' &&
+                                           !isUserIdError && // Don't show copy button for error messages
                                            (copyableFields.some(field =>
                                                formattedKey.toLowerCase().includes(field) ||
                                                key.toLowerCase().includes(field)
@@ -394,7 +404,7 @@
                 html += `
                     <div style="margin-left: ${indent}px; margin-bottom: 4px; display: flex; align-items: center; padding: 2px 0;">
                         <span style="font-weight: 500; color: #333; margin-right: 8px; min-width: 120px;">${formattedKey}:</span>
-                        <span style="color: ${valueColor}; word-break: break-word;">${displayValue}</span>
+                        <span style="color: ${valueColor}; word-break: break-word; ${errorStyle}">${displayValue}</span>
                         ${copyButton}
                     </div>
                 `;

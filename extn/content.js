@@ -295,12 +295,18 @@
         });
     }
 
-    // Setup copy field button listeners
+    // Setup copy field button listeners (including JSON objects)
     function setupCopyFieldListeners(widget) {
+        // Handle regular field copy buttons
         widget.querySelectorAll('.copy-field-btn').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
                 const value = this.getAttribute('data-value');
                 const fieldName = this.getAttribute('title').replace('Copy ', '');
+
+                console.log('Copying field value:', value); // Debug log
 
                 navigator.clipboard.writeText(value).then(() => {
                     const originalText = this.innerHTML;
@@ -322,9 +328,55 @@
                 });
             });
         });
+
+        // Handle JSON object copy buttons
+        widget.querySelectorAll('.copy-json-object-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Get the stored JSON data from the button element
+                const jsonData = this._jsonData;
+                const fieldName = this._fieldName || 'Object';
+
+                if (!jsonData) {
+                    console.error('No JSON data found on button');
+                    showNotification('Error: No data to copy', 'error');
+                    return;
+                }
+
+                try {
+                    const jsonString = JSON.stringify(jsonData, null, 2);
+                    console.log('Copying JSON:', jsonString); // Debug log
+
+                    navigator.clipboard.writeText(jsonString).then(() => {
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '✅';
+                        this.style.background = '#4CAF50';
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.style.background = '#2196F3';
+                        }, 1500);
+
+                        // Show brief notification
+                        showNotification(`${fieldName} JSON copied to clipboard`, 'success');
+                    }).catch(err => {
+                        console.error('Failed to copy JSON:', err);
+                        this.innerHTML = '❌';
+                        setTimeout(() => {
+                            this.innerHTML = '📋 JSON';
+                        }, 1500);
+                        showNotification('Failed to copy to clipboard', 'error');
+                    });
+                } catch (error) {
+                    console.error('Error stringifying JSON:', error);
+                    showNotification('Error processing JSON data', 'error');
+                }
+            });
+        });
     }
 
-    // Format data as tree view with selective copy buttons
+    // Format data as tree view with selective copy buttons (including JSON objects)
     function formatDataAsTree(data, level = 0) {
         if (!data || typeof data !== 'object') {
             return '<div style="color: #666;">No data available</div>';
@@ -335,11 +387,20 @@
 
         Object.entries(data).forEach(([key, value], index) => {
             const nodeId = `node-${level}-${index}-${Math.random().toString(36).substr(2, 9)}`;
+            const buttonId = `copy-btn-${level}-${index}-${Math.random().toString(36).substr(2, 9)}`;
             const formattedKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
             if (typeof value === 'object' && value !== null) {
                 const childCount = Array.isArray(value) ? value.length : Object.keys(value).length;
                 const isArray = Array.isArray(value);
+
+                // Add copy button for JSON objects/arrays
+                const copyJsonButton = `
+                    <button class="copy-json-object-btn" id="${buttonId}"
+                            title="Copy ${formattedKey} JSON"
+                            style="margin-left: 8px; padding: 2px 6px; border: 1px solid #2196F3; border-radius: 3px;
+                                   background: #2196F3; color: white; cursor: pointer; font-size: 10px;">📋 JSON</button>
+                `;
 
                 html += `
                     <div style="margin-left: ${indent}px; margin-bottom: 4px;">
@@ -351,12 +412,23 @@
                             <span style="color: #666; font-size: 12px; margin-left: 8px;">
                                 ${isArray ? `Array[${childCount}]` : `Object{${childCount}}`}
                             </span>
+                            ${copyJsonButton}
                         </div>
                         <div id="${nodeId}" style="margin-left: 16px;">
                             ${formatDataAsTree(value, level + 1)}
                         </div>
                     </div>
                 `;
+
+                // Store the JSON data on the button element after it's created
+                setTimeout(() => {
+                    const button = document.getElementById(buttonId);
+                    if (button) {
+                        button._jsonData = value;
+                        button._fieldName = formattedKey;
+                    }
+                }, 0);
+
             } else {
                 const valueColor = getValueColor(value);
                 const displayValue = formatValue(value);

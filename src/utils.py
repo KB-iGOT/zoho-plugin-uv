@@ -77,7 +77,7 @@ def get_user_details_from_igot(email: str) -> dict:
     payload = {
         "request": {
             "filters": {
-                "email": email
+                "email": email.lower()
             },
             "limit": 1,
             "sort_by": {"createdDate": "desc"}

@@ -58,7 +58,7 @@ async def get_ticket_user_details(
         return {"error": "Ticket details not found."}
 
     print("Ticket Details: ", ticket_details)
-    user_email = ticket_details.get("email")
+    user_email = ticket_details.get("email").lower()
 
     if not user_email:
         return {"error": "User email not found in ticket details."}
